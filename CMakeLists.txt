@@ -41,9 +41,6 @@ else()
 endif()
 
 
-option(LLAMA_CLBLAST                         "llama: use CLBlast"                               OFF)
-
-
 option(BUILD_SHARED_LIBS "build shared libraries" ${BUILD_SHARED_LIBS_DEFAULT})
 
 
@@ -94,21 +91,6 @@ if (NOT DEFINED GGML_CUDA_USE_GRAPHS)
     set(GGML_CUDA_USE_GRAPHS ON)
 endif()
 
-if (LLAMA_CLBLAST)
-    find_package(CLBlast)
-    if (CLBlast_FOUND)
-        message(STATUS "CLBlast found")
-
-        set(GGML_HEADERS_OPENCL ggml-opencl.h)
-        set(GGML_SOURCES_OPENCL ggml-opencl.cpp)
-
-        add_compile_definitions(GGML_USE_CLBLAST)
-
-        set(LLAMA_EXTRA_LIBS ${LLAMA_EXTRA_LIBS} clblast)
-    else()
-        message(WARNING "CLBlast not found")
-    endif()
-endif()
 
 # transition helpers
 function (llama_option_depr TYPE OLD NEW)
@@ -120,6 +102,7 @@ endfunction()
 
 llama_option_depr(FATAL_ERROR LLAMA_CUBLAS              GGML_CUDA)
 llama_option_depr(WARNING     LLAMA_CUDA                GGML_CUDA)
+llama_option_depr(WARNING     LLAMA_CLBLAST             GGML_CLBLAST)
 llama_option_depr(WARNING     LLAMA_KOMPUTE             GGML_KOMPUTE)
 llama_option_depr(WARNING     LLAMA_METAL               GGML_METAL)
 llama_option_depr(WARNING     LLAMA_METAL_EMBED_LIBRARY GGML_METAL_EMBED_LIBRARY)

@@ -82,6 +82,11 @@ GGML_CUDA := 1
 DEPRECATE_WARNING := 1
 endif
 
+ifdef LLAMA_CLBLAST
+GGML_CLBLAST := 1
+DEPRECATE_WARNING := 1
+endif	
+
 ifdef LLAMA_KOMPUTE
 GGML_KOMPUTE := 1
 DEPRECATE_WARNING := 1
@@ -713,7 +718,7 @@ ggml/src/ggml-cuda.o: \
 endif # GGML_CUDA
 
 
-ifdef LLAMA_CLBLAST
+ifdef GGML_CLBLAST
 	MK_CPPFLAGS += -DGGML_USE_CLBLAST $(shell pkg-config --cflags-only-I clblast OpenCL)
 	MK_CFLAGS   += $(shell pkg-config --cflags-only-other clblast OpenCL)
 	MK_CXXFLAGS += $(shell pkg-config --cflags-only-other clblast OpenCL)
@@ -725,8 +730,9 @@ ifdef LLAMA_CLBLAST
 		MK_LDFLAGS += $(shell pkg-config --libs clblast OpenCL)
 	endif
 	OBJS    += ggml-opencl.o
+	OBJ_GGML    += ggml/src/ggml-opencl/ggml-opencl.o
 
-ggml-opencl.o: ggml-opencl.cpp ggml-opencl.h
+ggml-opencl.o: ggml/src/ggml-opencl/ggml-opencl.cpp ggml/src/ggml-opencl/ggml-opencl.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 endif # LLAMA_CLBLAST
 

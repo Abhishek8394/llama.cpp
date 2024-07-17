@@ -100,6 +100,7 @@ endif()
 set(GGML_SCHED_MAX_COPIES  "4" CACHE STRING "ggml: max input copies for pipeline parallelism")
 
 # 3rd party libs / backends
+option(GGML_CLBLAST                         "ggml: enable ClBlast framework"                  ON)
 option(GGML_ACCELERATE                      "ggml: enable Accelerate framework"               ON)
 option(GGML_BLAS                            "ggml: use BLAS"                                  ${GGML_BLAS_DEFAULT})
 set(GGML_BLAS_VENDOR ${GGML_BLAS_VENDOR_DEFAULT} CACHE STRING
@@ -200,7 +201,9 @@ set(GGML_PUBLIC_HEADERS
     include/ggml-backend.h
     "${GGML_HEADERS_CUDA}"
     "${GGML_HEADERS_METAL}"
-    "${GGML_HEADERS_EXTRA}")
+    "${GGML_HEADERS_EXTRA}"
+    "${GGML_HEADERS_CLBLAST}"
+    )
 
 set_target_properties(ggml PROPERTIES PUBLIC_HEADER "${GGML_PUBLIC_HEADERS}")
 #if (GGML_METAL)

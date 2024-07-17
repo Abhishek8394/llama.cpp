@@ -237,6 +237,23 @@ if (GGML_BLAS)
     endif()
 endif()
 
+if (GGML_CLBLAST)
+    find_package(CLBlast)
+    if (CLBlast_FOUND)
+        message(STATUS "CLBlast found")
+
+        set(GGML_HEADERS_CLBLAST ggml-opencl.h)
+        set(GGML_SOURCES_CLBLAST ggml-opencl.cpp)
+
+        add_compile_definitions(GGML_USE_CLBLAST)
+
+        set(GGML_EXTRA_LIBS ${GGML_EXTRA_LIBS} clblast)
+    else()
+        message(WARNING "CLBlast not found")
+    endif()
+endif()
+    
+
 if (GGML_LLAMAFILE)
     message(STATUS "Using llamafile")
 
@@ -529,6 +546,7 @@ if (GGML_RPC)
     set(GGML_HEADERS_RPC ../include/ggml-rpc.h)
     set(GGML_SOURCES_RPC ggml-rpc.cpp)
 endif()
+
 
 if (GGML_VULKAN)
     find_package(Vulkan COMPONENTS glslc REQUIRED)
